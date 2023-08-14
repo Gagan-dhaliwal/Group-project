@@ -9,13 +9,20 @@ public class WarGame extends Game {
     private final WarPlayer player2;
     private final Scanner scan;
     private final int maxConsecutiveTies = 3; 
+  public WarPlayer getPlayer1() {
+        return player1;
+    }
+
+    public WarPlayer getPlayer2() {
+        return player2;
+    }
 
     public WarGame(String name) {
         super(name);
         deck = new WarGroupOfCards();
         scan = new Scanner(System.in);
 
-        System.out.println("Enter '1' to play with the computer or '2' to play with another player:");
+        System.out.println("Enter '1' to play with the computer or '2' to play with another player:\n-----------");
         int choose= scan.nextInt();
         scan.nextLine(); 
 
@@ -57,7 +64,7 @@ public class WarGame extends Game {
             }
         }
     }
-private void cardsDivide() {
+public void cardsDivide() {
         ArrayList<Card> cards = deck.getCards();
         //int divided = deck.getSize() / 2;
         int divided = 7;
@@ -66,41 +73,50 @@ private void cardsDivide() {
             player2.getDeck().add((WarCard) cards.remove(0));
         }
     }
-    private void playerTurn(WarPlayer player) {
+    public void playerTurn(WarPlayer player) {
         System.out.println("Press Enter to continue to the next round...");
         scan.nextLine();
-        WarCard card = player.getDeck().remove(0);
-        System.out.println(player.getName() + " plays: " + card);
+        
+        if (!player.getDeck().isEmpty()) {
+            WarCard card = player.getDeck().remove(0);
+            System.out.println(player.getName() + " plays: " + card);
     
-        cardCompare(card, player);
+            cardCompare(card, player);
     
-        System.out.println("Scoreboard:");
-        System.out.println(player1.getName() + "'s deck size: " + player1.getDeck().size());
-        System.out.println(player2.getName() + "'s deck size: " + player2.getDeck().size());
-    }
-
-    private void cardCompare(WarCard card, WarPlayer player) {
-        WarPlayer player3 = (player == player1) ? player2 : player1;
-        WarCard card3 = player3.getDeck().remove(0);
-        System.out.println(player3.getName() + " plays: " + card3);
-
-        int comparison = card.getRank().compareTo(card3.getRank());
-
-        if (comparison > 0) {
-            player.getDeck().add(card);
-            player.getDeck().add(card3);
-            System.out.println(player.getName() + " wins the round!");
-        } else if (comparison < 0) {
-            player3.getDeck().add(card);
-            player3.getDeck().add(card3);
-            System.out.println(player3.getName() + " wins the round!");
+            System.out.println("Scoreboard:");
+            System.out.println(player1.getName() + "'s deck size: " + player1.getDeck().size());
+            System.out.println(player2.getName() + "'s deck size: " + player2.getDeck().size());
         } else {
-            handleTie(card, card3);
+            System.out.println(player.getName() + "'s deck is empty!");
         }
     }
+    
 
-    private void handleTie(WarCard card1, WarCard card2) {
-        System.out.println("It's a tie! Going to war...");
+    public void cardCompare(WarCard card, WarPlayer player) {
+        WarPlayer player3 = (player == player1) ? player2 : player1;
+        if (!player3.getDeck().isEmpty()) {
+            WarCard card3 = player3.getDeck().remove(0);
+            System.out.println(player3.getName() + " plays: " + card3);
+    
+            int comparison = card.getRank().compareTo(card3.getRank());
+    
+            if (comparison > 0) {
+                player.getDeck().add(card);
+                player.getDeck().add(card3);
+                System.out.println(player.getName() + " wins the round\n-----------");
+            } else if (comparison < 0) {
+                player3.getDeck().add(card);
+                player3.getDeck().add(card3);
+                System.out.println(player3.getName() + " wins the round\n-----------");
+            } else {
+                handleTie(card, card3);
+            }
+        }
+    }
+    
+
+    public void handleTie(WarCard card1, WarCard card2) {
+        System.out.println("It's a tie! Going to war...\n");
         int faceDownCards = 3;
         boolean isItTie = true;
         ArrayList<WarCard> tieCards = new ArrayList<>();
@@ -165,12 +181,31 @@ private void cardsDivide() {
         }
 
     }
-   private void declareStalemate() {
+    public String getWinnerMessage() {
+        int player1DeckSize = player1.getDeck().size();
+        int player2DeckSize = player2.getDeck().size();
+
+        if (player1DeckSize > player2DeckSize) {
+            return player1.getName() + " wins!";
+        } else if (player1DeckSize < player2DeckSize) {
+            return player2.getName() + " wins!";
+        } else {
+            return "It's a draw! No winner.";
+        }
+    }
+   public void declareStalemate() {
         System.out.println("Continuous tie (Stalemate)!");
         System.out.println("Final result:");
         System.out.println(player1.getName() + "'s deck size: " + player1.getDeck().size());
         System.out.println(player2.getName() + "'s deck size: " + player2.getDeck().size());
         System.out.println("There is no winner. It's a draw!");
     }
-   
+   public String getStalemateMessage() {
+        return "Continuous tie (Stalemate)!" + System.lineSeparator() +
+               "Final result:" + System.lineSeparator() +
+               player1.getName() + "'s deck size: " + player1.getDeck().size() + System.lineSeparator() +
+               player2.getName() + "'s deck size: " + player2.getDeck().size() + System.lineSeparator() +
+               "There is no winner. It's a draw!";
+    }
+
 }
