@@ -22,7 +22,7 @@ public class WarGame extends Game {
         deck = new WarGroupOfCards();
         scan = new Scanner(System.in);
 
-        System.out.println("Enter '1' to play with the computer or '2' to play with another player:\n-----------");
+        System.out.println("Enter '1' to play with the computer or '2' to play with another player:");
         int choose= scan.nextInt();
         scan.nextLine(); 
 
@@ -103,11 +103,11 @@ public void cardsDivide() {
             if (comparison > 0) {
                 player.getDeck().add(card);
                 player.getDeck().add(card3);
-                System.out.println(player.getName() + " wins the round\n-----------");
+                System.out.println(player.getName() + " wins the round!");
             } else if (comparison < 0) {
                 player3.getDeck().add(card);
                 player3.getDeck().add(card3);
-                System.out.println(player3.getName() + " wins the round\n-----------");
+                System.out.println(player3.getName() + " wins the round!");
             } else {
                 handleTie(card, card3);
             }
@@ -116,7 +116,7 @@ public void cardsDivide() {
     
 
     public void handleTie(WarCard card1, WarCard card2) {
-        System.out.println("It's a tie! Going to war...\n");
+        System.out.println("It's a tie! Going to war...");
         int faceDownCards = 3;
         boolean isItTie = true;
         ArrayList<WarCard> tieCards = new ArrayList<>();
